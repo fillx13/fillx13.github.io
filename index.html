@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SMM SERVER | الموقع الأسطوري 🔥</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #03050b;
+            font-family: 'Cairo', sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        canvas#particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0,255,255,0.05) 0%, #000000 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .cyber-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            padding: 0.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid cyan;
+            box-shadow: 0 0 30px rgba(0,255,255,0.3);
+            animation: borderPulse 2s infinite alternate;
+        }
+
+        @keyframes borderPulse {
+            0% { border-color: rgba(0,255,255,0.3); box-shadow: 0 0 10px rgba(0,255,255,0.2); }
+            100% { border-color: rgba(0,255,255,1); box-shadow: 0 0 40px rgba(0,255,255,0.8); }
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            border: 3px solid cyan;
+            box-shadow: 0 0 20px cyan;
+            animation: float3d 3s infinite ease-in-out;
+        }
+
+        @keyframes float3d {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-8px); }
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, #0ff, #f0f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .nav-cyber {
+            background: transparent;
+            border: 1.5px solid cyan;
+            color: cyan;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo';
+            font-size: 0.85rem;
+        }
+
+        .nav-cyber.active, .nav-cyber:hover {
+            background: cyan;
+            color: black;
+            box-shadow: 0 0 20px cyan;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(0,255,255,0.3);
+            transition: 0.3s;
+        }
+
+        .glass-card:hover {
+            border-color: cyan;
+            box-shadow: 0 0 25px rgba(0,255,255,0.2);
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0,30,40,0.5);
+            border-radius: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: cyan;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(0,255,255,0.1);
+        }
+
+        .rule-list li {
+            background: rgba(0,255,255,0.08);
+            margin: 0.6rem 0;
+            padding: 0.8rem 1rem;
+            border-radius: 1rem;
+            border-right: 3px solid cyan;
+            list-style: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #0ff, #0099cc);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px cyan;
+        }
+
+        .stats-numbers {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            border: 1px solid cyan;
+        }
+
+        .stat-box h3 {
+            font-size: 2rem;
+            color: cyan;
+        }
+
+        .admin-login {
+            max-width: 400px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .admin-login input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid cyan;
+            border-radius: 1rem;
+            color: white;
+        }
+
+        .top-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .top-card {
+            background: rgba(0,0,0,0.6);
+            border-radius: 1.2rem;
+            padding: 1rem;
+        }
+
+        .top-card h3 {
+            color: cyan;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .top-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem;
+            border-bottom: 1px solid rgba(0,255,255,0.3);
+        }
+
+        .rank-1 { color: gold; }
+        .rank-2 { color: silver; }
+        .rank-3 { color: #cd7f32; }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            border-top: 1px solid cyan;
+            color: #0ff;
+        }
+
+        @media (max-width: 800px) {
+            .container { padding: 1rem; }
+            .cyber-header { flex-direction: column; }
+            .logo-text { font-size: 1.3rem; }
+        }
+
+        .server-ip {
+            background: rgba(0,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-family: monospace;
+            direction: ltr;
+            font-size: 0.9rem;
+        }
+        
+        .command-box {
+            background: rgba(0,0,0,0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-family: monospace;
+            border-left: 3px solid cyan;
+            margin: 0.5rem 0;
+        }
+        
+        .home-page { display: block; }
+    </style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<div class="container">
+    <div class="cyber-header">
+        <div class="logo-area">
+            <img class="logo-img" src="https://cdn.discordapp.com/icons/1179443679853826150/bdb2978b468b2fccbb58a91114e512d2.png?size=128" alt="SMM">
+            <div class="logo-text">SMM SERVER</div>
+        </div>
+        <div class="nav-buttons" id="nav-buttons">
+            <button class="nav-cyber active" data-page="home">🏠 الرئيسية</button>
+            <button class="nav-cyber" data-page="features">✨ الميزات</button>
+            <button class="nav-cyber" data-page="rules">⚖️ القوانين</button>
+            <button class="nav-cyber" data-page="stats">📊 الإحصائيات</button>
+            <button class="nav-cyber" data-page="events">🎉 الفعاليات</button>
+            <button class="nav-cyber" data-page="faq">❓ أسئلة شائعة</button>
+            <button class="nav-cyber" data-page="top">🏆 Top 5</button>
+            <button class="nav-cyber" data-page="community">👥 المجتمع</button>
+            <button class="nav-cyber" data-page="rating">⭐ التقييم</button>
+            <button class="nav-cyber" data-page="ranks">🎮 رتب التفاعل</button>
+            <button class="nav-cyber" data-page="protection">🛡️ الحماية</button>
+            <button class="nav-cyber" data-page="updates">📜 الإعلانات</button>
+            <button class="nav-cyber" data-page="weekly">🎪 الفعاليات الأسبوعية</button>
+            <button class="nav-cyber" data-page="points">💎 نظام النقاط</button>
+            <button class="nav-cyber" data-page="worlds">🌍 عوالم السيرفر</button>
+            <button class="nav-cyber" data-page="access">📱 طرق الدخول</button>
+            <button class="nav-cyber" data-page="tips">💡 نصائح للمبتدئين</button>
+            <button class="nav-cyber" data-page="teams">🤝 التعاون والتيمات</button>
+            <button class="nav-cyber" data-page="profit">💰 طرق الربح</button>
+            <button class="nav-cyber" data-page="commands">⌨️ أوامر السيرفر</button>
+            <button class="nav-cyber" id="admin-login-btn" style="border-color: magenta; color: magenta;">🔐 دخول الإدارة</button>
+        </div>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div id="home-page" class="page" style="display: block;">
+        <div class="glass-card" style="text-align: center;">
+            <h1 style="font-size: 3rem; color: cyan;">SMM SERVER</h1>
+            <p style="font-size: 1.2rem; margin: 1rem 0;">🏆 أقوى سيرفر ماين كرافت في العالم العربي 🏆</p>
+            <div class="server-ip" style="display: inline-block; margin: 1rem 0;">
+                <i class="fas fa-server"></i> Java: 194.56.226.253:25670 | Bedrock: 194.56.226.253 Port: 25670
+            </div>
+            <div class="stats-numbers">
+                <div class="stat-box"><i class="fas fa-users"></i><h3 id="online-players">247</h3><p>لاعب أونلاين</p></div>
+                <div class="stat-box"><i class="fas fa-user-plus"></i><h3 id="total-members">5842</h3><p>عضو مسجل</p></div>
+                <div class="stat-box"><i class="fas fa-star"></i><h3 id="total-points">12840</h3><p>إجمالي النقاط</p></div>
+            </div>
+            <button class="btn-primary" onclick="window.open('https://discord.gg/1smm1', '_blank')"><i class="fab fa-discord"></i> انضم للديسكورد</button>
+        </div>
+        <div class="grid-4">
+            <div class="feature-card"><i class="fas fa-dragon"></i><h3>سرفايفل احترافي</h3><p>عوالم طبيعية بحماية كاملة</p></div>
+            <div class="feature-card"><i class="fas fa-parkour"></i><h3>باركور ممتع</h3><p>تحديات يومية وجوائز</p></div>
+            <div class="feature-card"><i class="fas fa-shield-haltered"></i><h3>حماية خارقة</h3><p>Anti-DDoS + Anti-Cheat</p></div>
+            <div class="feature-card"><i class="fas fa-headset"></i><h3>دعم 24/7</h3><p>فريق محترف يرد فوراً</p></div>
+        </div>
+    </div>
+
+    <!-- FEATURES PAGE -->
+    <div id="features-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-gem"></i> مميزات سيرفر SMM</h2>
+            <div class="grid-4">
+                <div class="feature-card"><i class="fas fa-coins"></i><h3>نظام اقتصادي</h3><p>/shop & /sellgui للشراء والبيع</p></div>
+                <div class="feature-card"><i class="fas fa-chart-line"></i><h3>نقاط نشاط</h3><p>اربح نقاط من التفاعل في الديسكورد</p></div>
+                <div class="feature-card"><i class="fas fa-trophy"></i><h3>رتب تفاعلية</h3><p>تدرج رتب مع النشاط داخل السيرفر</p></div>
+                <div class="feature-card"><i class="fas fa-calendar"></i><h3>فعاليات أسبوعية</h3><p>مسابقات وجوائز قيمة</p></div>
+                <div class="feature-card"><i class="fas fa-code"></i><h3>بلجنز حصرية</h3><p>إضافات صنعت خصيصاً للسيرفر</p></div>
+                <div class="feature-card"><i class="fas fa-globe"></i><h3>خريطة واسعة</h3><p>عوالم سرفايفل جميلة ومتنوعة</p></div>
+                <div class="feature-card"><i class="fas fa-crown"></i><h3>رتب VIP</h3><p>مزايا حصرية للأعضاء المميزين</p></div>
+                <div class="feature-card"><i class="fas fa-gamepad"></i><h3>أنشطة ترفيهية</h3><p>ألعاب متنوعة داخل السيرفر</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RULES PAGE -->
+    <div id="rules-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;">📜 قوانين السيرفر</h2>
+            <h3>⚔️ قوانين ماين كرافت:</h3>
+            <ul class="rule-list">
+                <li><strong>عالم السرفايفل:</strong> ممنوع القتل أو التخريب، استخدم /claim لحماية أرضك و /trust لمنح الثقة للاعبين</li>
+                <li><strong>عالم الباركور:</strong> طور المغامرة فقط، لا للغش أو التخريب</li>
+                <li><strong>الهاك والغش:</strong> حظر فوري ودائم بدون استثناء</li>
+                <li><strong>التجارة:</strong> الغش التجاري = عقوبات صارمة</li>
+            </ul>
+            <h3>💬 قوانين الديسكورد:</h3>
+            <ul class="rule-list">
+                <li>احترام الجميع، ممنوع السب أو التنمر</li>
+                <li>ممنوع نشر روابط أو إعلانات بدون إذن</li>
+                <li>الالتزام بالرومات المخصصة، عدم السبام</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STATS PAGE -->
+    <div id="stats-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-chart-simple"></i> إحصائيات السيرفر</h2>
+            <div class="stats-numbers">
+                <div class="stat-box"><i class="fas fa-user-friends"></i><h3 id="stat-online">247</h3><p>لاعب أونلاين</p></div>
+                <div class="stat-box"><i class="fas fa-users"></i><h3 id="stat-total">5842</h3><p>إجمالي الأعضاء</p></div>
+                <div class="stat-box"><i class="fas fa-star"></i><h3 id="stat-points">12840</h3><p>إجمالي النقاط</p></div>
+                <div class="stat-box"><i class="fas fa-calendar"></i><h3 id="stat-events">12</h3><p>فعالية منتهية</p></div>
+                <div class="stat-box"><i class="fas fa-trophy"></i><h3 id="stat-vip">24</h3><p>عضو VIP</p></div>
+                <div class="stat-box"><i class="fas fa-comment"></i><h3 id="stat-reviews">47</h3><p>تقييم ورد</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EVENTS PAGE -->
+    <div id="events-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-calendar-alt"></i> الفعاليات القادمة</h2>
+            <div id="upcoming-events-list"></div>
+            <h2 style="color: cyan; margin-top: 2rem;"><i class="fas fa-history"></i> الفعاليات المنتهية</h2>
+            <div id="past-events-list"></div>
+        </div>
+    </div>
+
+    <!-- FAQ PAGE -->
+    <div id="faq-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-question-circle"></i> الأسئلة الشائعة</h2>
+            <div class="feature-card"><strong>❓ كيف أنضم للسيرفر؟</strong><p>IP: 194.56.226.253:25670 (جافا) / Bedrock: 194.56.226.253 Port: 25670</p></div>
+            <div class="feature-card"><strong>❓ كيف أحمي أرضي؟</strong><p>استخدم الأمر /claim لتملك الأرض، و /trust (اسم اللاعب) لمنحه صلاحيات</p></div>
+            <div class="feature-card"><strong>❓ كيف أشتري أو أبيع؟</strong><p>استخدم /shop للشراء و /sellgui للبيع</p></div>
+            <div class="feature-card"><strong>❓ كيف أحصل على نقاط؟</strong><p>من خلال التفاعل في الديسكورد والفعاليات داخل السيرفر</p></div>
+            <div class="feature-card"><strong>❓ فيه فعاليات؟</strong><p>نعم، فعاليات أسبوعية وجوائز قيمة تابع الإعلانات في الديسكورد</p></div>
+            <div class="feature-card"><strong>❓ كيف أتواصل مع الإدارة؟</strong><p>عبر تكت الدعم في ديسكورد SMM</p></div>
+            <div class="feature-card"><strong>❓ وش هي رتب ADVISOR؟</strong><p>رتب مميزة بمزايا حصرية</p></div>
+            <div class="feature-card"><strong>❓ السيرفر Bedrock شغال؟</strong><p>إي شغال 100% على المنفذ 25670</p></div>
+        </div>
+    </div>
+
+    <!-- TOP PAGE -->
+    <div id="top-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan; text-align: center;"><i class="fas fa-microphone-alt"></i> Top 5 Voice (الصوت)</h2>
+            <div id="top-voice-list" class="top-list"></div>
+            <h2 style="color: cyan; text-align: center; margin-top: 2rem;"><i class="fas fa-keyboard"></i> Top 5 Text (الكتابي)</h2>
+            <div id="top-text-list" class="top-list"></div>
+        </div>
+    </div>
+
+    <!-- COMMUNITY PAGE -->
+    <div id="community-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-users"></i> الطاقم الإداري</h2>
+            <div id="staff-list" class="grid-4"></div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn-primary" onclick="window.open('https://discord.gg/1smm1', '_blank')"><i class="fab fa-discord"></i> انضم للمجتمع</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RATING PAGE -->
+    <div id="rating-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-star"></i> شاركنا رأيك</h2>
+            <form id="review-form" style="max-width: 500px; margin: 0 auto;">
+                <div style="margin: 1rem 0;"><input type="text" id="review-name" placeholder="اسمك" class="server-ip" style="width: 100%;"></div>
+                <div style="margin: 1rem 0;">
+                    <select id="review-rating" class="server-ip" style="width: 100%;">
+                        <option value="5">★★★★★ (ممتاز)</option>
+                        <option value="4">★★★★☆ (جيد جداً)</option>
+                        <option value="3">★★★☆☆ (جيد)</option>
+                        <option value="2">★★☆☆☆ (مقبول)</option>
+                        <option value="1">★☆☆☆☆ (سيئ)</option>
+                    </select>
+                </div>
+                <div style="margin: 1rem 0;"><textarea id="review-text" rows="4" placeholder="رأيك..." class="server-ip" style="width: 100%;"></textarea></div>
+                <button type="submit" class="btn-primary" style="width: 100%;">إرسال التقييم</button>
+            </form>
+            <div id="review-success" style="display: none; background: #0a4c3a; padding: 1rem; border-radius: 1rem; margin-top: 1rem; text-align: center;">✅ تم استلام تقييمك! شكراً لك ❤️</div>
+        </div>
+    </div>
+
+    <!-- RANKS PAGE -->
+    <div id="ranks-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-ranking-star"></i> رتب التفاعل في الديسكورد</h2>
+            <div class="grid-4">
+                <div class="feature-card"><i class="fas fa-user"></i><h3>@VOLUNTEER</h3><p>المستوى 1<br>المميزات: لا يوجد</p></div>
+                <div class="feature-card"><i class="fas fa-newspaper"></i><h3>@JOURNALIST</h3><p>المستوى 2<br>المميزات: رول + إمكانية إرسال صور في الرومات</p></div>
+                <div class="feature-card"><i class="fas fa-chess-queen"></i><h3>@STRATEGIST</h3><p>المستوى 4<br>المميزات: رول + إرسال صور + إرسال رسائل صوتية</p></div>
+                <div class="feature-card"><i class="fas fa-handshake"></i><h3>@DIPLOMAT</h3><p>المستوى 8<br>المميزات: رول + صور + صوت + تغيير الاسم + إيموجيات على الرسائل</p></div>
+                <div class="feature-card"><i class="fas fa-crown"></i><h3>@ADVISOR</h3><p>المستوى 16<br>المميزات: رول + صور + صوت + تغيير الاسم + إيموجيات + ملصقات وإيموجيات من خارج السيرفر</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROTECTION PAGE -->
+    <div id="protection-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-shield-haltered"></i> أنظمة الحماية في السيرفر</h2>
+            <div class="feature-card">
+                <h3>🔒 /claim - حماية أرضك</h3>
+                <p>استخدم الأمر /claim لتملك الأرض التي تقف عليها. مع شفل القولد (Golden Shovel) تقدر تكبير منطقتك وحمايتها من التخريب.</p>
+                <div class="command-box">/claim - تملك الأرض</div>
+                <div class="command-box">/trust &lt;اللاعب&gt; - منح الثقة للاعب للبناء والفتح</div>
+                <div class="command-box">/untrust &lt;اللاعب&gt; - إزالة الثقة</div>
+            </div>
+            <div class="feature-card">
+                <h3>🛡️ حماية السيرفر</h3>
+                <p>نظام حماية متكامل ضد الهاكات والديدوس، مع أنتي-تشيت يمنع أي محاولات غش. السيرفر محمي 24 ساعة.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATES PAGE -->
+    <div id="updates-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-bullhorn"></i> آخر الإعلانات والتحديثات</h2>
+            <div id="updates-list">
+                <div class="feature-card"><h3>📢 تحديث نظام الحماية</h3><p>تم تحديث نظام /claim ليصبح أسهل وأسرع. الآن تقدر تمسك شفل القولد وتوسع منطقتك!</p><small>2026-03-28</small></div>
+                <div class="feature-card"><h3>🎉 فعالية الباركور الأسبوعية</h3><p>فعالية الباركور بنعلن في الديسكورد. الجوائز: نقاط + رتب مميزة!</p><small>2026-03-25</small></div>
+                <div class="feature-card"><h3>✨ إضافة عالم جديد</h3><p>تم إضافة عالم باركور جديد بتصميم فريد. جربوا التحدي!</p><small>2026-03-20</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WEEKLY PAGE -->
+    <div id="weekly-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-calendar-week"></i> الفعاليات الأسبوعية الثابتة</h2>
+            <div class="grid-4">
+                <div class="feature-card"><i class="fas fa-parkour"></i><h3>بنعلن في الديسكورد - باركور</h3><p>بنعلن في الديسكورد<br>جوائز: نقاط + رتبة "سيد الباركور"</p></div>
+                <div class="feature-card"><i class="fas fa-building"></i><h3>بنعلن في الديسكورد - بناء إبداعي</h3><p>بنعلن في الديسكورد<br>جوائز: نقاط + مواد بناء نادرة</p></div>
+                <div class="feature-card"><i class="fas fa-sword"></i><h3>بنعلن في الديسكورد - PVP</h3><p>بنعلن في الديسكورد<br>جوائز: نقاط + أسلحة نادرة</p></div>
+                <div class="feature-card"><i class="fas fa-users"></i><h3>بنعلن في الديسكورد - فعالية جماعية</h3><p>بنعلن في الديسكورد<br>فعالية مفاجئة كل أسبوع</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POINTS PAGE -->
+    <div id="points-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-star"></i> نظام النقاط والمكافآت</h2>
+            <div class="feature-card"><h3>🎯 كيف تكسب نقاط؟</h3><p>• التفاعل في الديسكورد<br>• المشاركة في الفعاليات<br>• النشاط داخل السيرفر<br>• دعوة أصدقاء جدد</p></div>
+            <div class="feature-card"><h3>🎁 مكافآت النقاط</h3><p>• 100 نقطة: صندوق عادي<br>• 500 نقطة: صندوق نادر<br>• 1000 نقطة: رتبة مميزة<br>• 5000 نقطة: رتبة VIP لمدة شهر</p></div>
+        </div>
+    </div>
+
+    <!-- WORLDS PAGE -->
+    <div id="worlds-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-globe"></i> عوالم السيرفر</h2>
+            <div class="grid-4">
+                <div class="feature-card"><i class="fas fa-tree"></i><h3>عالم السرفايفل</h3><p>عالم طبيعي واسع، يمكنك البناء والتعدين والتجارة بحماية كاملة عبر /claim</p></div>
+                <div class="feature-card"><i class="fas fa-mountain"></i><h3>عالم الباركور</h3><p>عالم مخصص لتحديات الباركور، طور المغامرة فقط. أكمل المسارات واربح جوائز!</p></div>
+                <div class="feature-card"><i class="fas fa-gamepad"></i><h3>عالم الميني جيمز</h3><p>ألعاب مصغرة متنوعة، تحديات سريعة وجوائز يومية</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCESS PAGE -->
+    <div id="access-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-mobile-alt"></i> طرق الدخول للسيرفر</h2>
+            <div class="feature-card"><h3>💻 Java Edition (البي سي)</h3><p>IP: <strong>194.56.226.253:25670</strong><br>ادخل من لانشر ماين كرافت الأصلي أو أي لانشر معتمد.</p></div>
+            <div class="feature-card"><h3>📱 Bedrock Edition (الجوال - PE)</h3><p>IP: <strong>194.56.226.253</strong><br>Port: <strong>25670</strong><br>يدعم جميع أجهزة الأندرويد والآيفون والكونسول.</p></div>
+            <div class="feature-card"><h3>⚠️ ملاحظات مهمة</h3><p>• المكركة (النسخ المقرصنة) لا تعمل، لازم حساب رسمي.<br>• سوني، جوال، بي سي - الكل يقدر يدخل عادي.<br>• تأكد من إصدار اللعبة 1.21+ للجافا و 1.21+ للبدروك.</p></div>
+        </div>
+    </div>
+
+    <!-- TIPS PAGE -->
+    <div id="tips-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-lightbulb"></i> نصائح للمبتدئين</h2>
+            <div class="grid-4">
+                <div class="feature-card"><i class="fas fa-pickaxe"></i><h3>1. ابدأ بجمع الموارد</h3><p>أول شي جمع خشب وحجر، اسوي أدوات أساسية، بعدين ابحث عن كهف عشان تجمع حديد ودايموند.</p></div>
+                <div class="feature-card"><i class="fas fa-home"></i><h3>2. احمي أرضك فوراً</h3><p>بعد ما تسوي بيتك، استخدم /claim عشان تحميه من التخريب.</p></div>
+                <div class="feature-card"><i class="fas fa-handshake"></i><h3>3. تعاون مع اللاعبين</h3><p>أفضل طريقة تتعلم هي تسأل اللاعبين القدامى، وشارك في الفعاليات.</p></div>
+                <div class="feature-card"><i class="fas fa-chart-line"></i><h3>4. جمع النقاط</h3><p>شارك في الديسكورد والفعاليات عشان تجمع نقاط وتستبدلها بجوائز.</p></div>
+                <div class="feature-card"><i class="fas fa-store"></i><h3>5. استخدم /shop و /sellgui</h3><p>بع الأشياء الزايدة عن طريق /sellgui واشتري اللي تحتاجه من /shop.</p></div>
+                <div class="feature-card"><i class="fas fa-diamond"></i><h3>6. ركز على الدايموند</h3><p>الدايموند أغلى مورد في السيرفر، اجمعه وبعه بسعر مرتفع.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEAMS PAGE -->
+    <div id="teams-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-users"></i> التعاون والتيمات</h2>
+            <div class="feature-card"><h3>🤝 كيف تسوي تيم؟</h3><p>تقدر تسوي تيم مع أصدقائك، تبنوا سوا، تحموا بعض، وتشاركوا في الفعاليات كفريق.</p></div>
+            <div class="feature-card"><h3>🏆 فوائد التيمات</h3><p>• حماية أفضل لأعضائك<br>• بناء مشاريع ضخمة<br>• منافسة في فعاليات التيمات<br>• جوائز خاصة للفرق الفائزة</p></div>
+            <div class="feature-card"><h3>⚔️ أشهر التيمات في السيرفر</h3><p>• Team SMM<br>• قريبا منعلن<br>• قريبا منعلن<br>• قريبا منعلن</p></div>
+        </div>
+    </div>
+
+    <!-- PROFIT PAGE -->
+    <div id="profit-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-coins"></i> طرق الربح في السيرفر</h2>
+            <div class="grid-4">
+                <div class="feature-card"><i class="fas fa-diamond"></i><h3>💎 الدايموند</h3><p>أغلى مورد في السيرفر! ابحث عنه في الطبقات العميقة (Y -50 إلى Y -64). الدايموند الواحد يباع بـ 1100 في السوق.</p></div>
+                <div class="feature-card"><i class="fas fa-tree"></i><h3>🌲 الموارد النادرة</h3><p>اجمع نذرايت، دايموند، وسلالات نادرة، وبعها في /sellgui أو للاعبين.</p></div>
+                <div class="feature-card"><i class="fas fa-farm"></i><h3>🚜 المزارع الأوتوماتيكية</h3><p>سوي مزارع للحديد، الذهب، أو الخضروات، وبيع المنتجات بكميات كبيرة.</p></div>
+                <div class="feature-card"><i class="fas fa-tools"></i><h3>🔧 خدمات للاعبين</h3><p>قدم خدمات مثل البناء، التعدين، أو تصميم المزارع مقابل فلوس.</p></div>
+                <div class="feature-card"><i class="fas fa-chart-line"></i><h3>📈 استثمار النقاط</h3><p>اجمع نقاط من الفعاليات وتربح اشياء نادرة تحتوي على موارد ثمينة.</p></div>
+                <div class="feature-card"><i class="fas fa-store"></i><h3>🏪 التجارة بين اللاعبين</h3><p>اشتري بأسعار منخفضة وبع بأسعار أعلى، تعلم السوق وشوف الطلب والعرض.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMMANDS PAGE -->
+    <div id="commands-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;"><i class="fas fa-terminal"></i> قائمة أوامر السيرفر</h2>
+            <div class="grid-4">
+                <div class="feature-card"><h3>🏠 أوامر الحماية</h3><p>/claim - تملك الأرض<br>/trust &lt;اللاعب&gt; - منح ثقة<br>/untrust &lt;اللاعب&gt; - إزالة الثقة</p></div>
+                <div class="feature-card"><h3>💰 أوامر الاقتصاد</h3><p>/shop - فتح المتجر<br>/sellgui - بيع الأشياء<br>/balance - رصيدك<br>/pay &lt;لاعب&gt; &lt;مبلغ&gt; - تحويل فلوس</p></div>
+                <div class="feature-card"><h3>🎮 أوامر عامة</h3><p>/spawn - العودة للسpawn<br>/home - العودة للبيت<br>/sethome - تعيين البيت<br>/tpa &lt;لاعب&gt; - طلب تلبورط</p></div>
+                <div class="feature-card"><h3>📊 أوامر أخرى</h3><p>/rules - عرض القوانين<br>/discord - رابط الديسكورد<br>/vote - التصويت للسيرفر<br>/help - قائمة المساعدة</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN PAGE -->
+    <div id="admin-login-page" class="page">
+        <div class="glass-card admin-login">
+            <h2 style="color: cyan;">🔐 دخول الإدارة</h2>
+            <input type="email" id="admin-email" placeholder="البريد الإلكتروني">
+            <input type="password" id="admin-password" placeholder="كلمة المرور">
+            <button class="btn-primary" onclick="adminLogin()">تسجيل الدخول</button>
+            <p id="login-error" style="color: red; margin-top: 1rem;"></p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL PAGE -->
+    <div id="admin-panel-page" class="page">
+        <div class="glass-card">
+            <h2 style="color: cyan;">👑 لوحة تحكم الإدارة</h2>
+            <div class="nav-buttons" style="margin-bottom: 1rem;">
+                <button class="nav-cyber" onclick="showAdminSection('dashboard')">📊 لوحة التحكم</button>
+                <button class="nav-cyber" onclick="showAdminSection('manage-reviews')">⭐ إدارة التقييمات</button>
+                <button class="nav-cyber" onclick="showAdminSection('manage-events')">🎉 إدارة الفعاليات</button>
+                <button class="nav-cyber" onclick="showAdminSection('manage-top')">🏆 إدارة Top 5</button>
+                <button class="nav-cyber" onclick="showAdminSection('manage-stats')">📈 إدارة الإحصائيات</button>
+                <button class="nav-cyber" onclick="logout()">🚪 تسجيل خروج</button>
+            </div>
+            <div id="admin-dashboard"></div>
+            <div id="admin-manage-reviews" style="display: none;"></div>
+            <div id="admin-manage-events" style="display: none;"></div>
+            <div id="admin-manage-top" style="display: none;"></div>
+            <div id="admin-manage-stats" style="display: none;"></div>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-crown"></i> SMM SERVER - حيث تصنع الأساطير | صنع بواسطة Fillx 🔥
+    </footer>
+</div>
+
+<script>
+    // بيانات التخزين
+    let reviews = JSON.parse(localStorage.getItem('smm_reviews') || '[]');
+    let events = JSON.parse(localStorage.getItem('smm_events') || '[]');
+    let topVoice = JSON.parse(localStorage.getItem('smm_top_voice') || '[{"name":"Ｍａｙ Ｂｅ Ｓ_ＩＳＨＥＲＥ!","points":1250},{"name":"Lola","points":980},{"name":"# Fillx","points":870},{"name":"SAIF !","points":760},{"name":"SAUD","points":650}]');
+    let topText = JSON.parse(localStorage.getItem('smm_top_text') || '[{"name":"MACE","points":1120},{"name":"C4 /•||•\\ Swiz","points":890},{"name":"Ｍａｙ Ｂｅ Ｓ_ＩＳＨＥＲＥ!","points":780},{"name":"卍HANE爪ツ","points":720},{"name":"ROY","points":610}]');
+    let stats = JSON.parse(localStorage.getItem('smm_stats') || '{"online":247,"totalMembers":5842,"totalPoints":12840,"eventsDone":12,"vipMembers":24,"reviewsCount":47}');
+    
+    const staff = [
+        { rank: "PRESIDENT", name: "SAIF" },
+        { rank: "VICE PRESIDENT", name: "! A-1 , MACE , ROY , Ｍａｙ Ｂｅ Ｓ_ＩＳＨＥＲＥ!" },
+        { rank: "PROFESSOR", name: "Z7M , matrex , مياو الفخم , 𝒏7𝒓" },
+        { rank: "PROTECTOR", name: "ZERO , 卍HANE爪ツ" },
+        { rank: "KLASH", name: "Lola , يوسف シ" },
+        { rank: "SIGNATURE", name: "Elaf , shamik501" },
+        { rank: "FOUNDER", name: "Fillx (منشئ الموقع)" }
+    ];
+    
+    const adminEmails = ['byanmnsour78@gmail.com', 'rayanmnsor123123@gmail.com'];
+    const adminPassword = 'kokowawa1212';
+    
+    function saveAll() {
+        localStorage.setItem('smm_reviews', JSON.stringify(reviews));
+        localStorage.setItem('smm_events', JSON.stringify(events));
+        localStorage.setItem('smm_top_voice', JSON.stringify(topVoice));
+        localStorage.setItem('smm_top_text', JSON.stringify(topText));
+        localStorage.setItem('smm_stats', JSON.stringify(stats));
+    }
+    
+    function showPage(pageId) {
+        // إخفاء كل الصفحات
+        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+        
+        // إظهار الصفحة المطلوبة
+        const targetPage = document.getElementById(pageId + '-page');
+        if(targetPage) targetPage.style.display = 'block';
+        
+        // تحديث حالة الأزرار
+        document.querySelectorAll('.nav-cyber').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.getAttribute('data-page') === pageId) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // تحديث المحتوى الديناميكي
+        if(pageId === 'top') renderTopLists();
+        if(pageId === 'events') renderEvents();
+        if(pageId === 'community') renderStaff();
+        if(pageId === 'stats') updateStatsDisplay();
+    }
+    
+    function renderTopLists() {
+        const voiceContainer = document.getElementById('top-voice-list');
+        const textContainer = document.getElementById('top-text-list');
+        if(voiceContainer) voiceContainer.innerHTML = '<div class="top-card"><h3>🎤 قائمة الصوت</h3>' + topVoice.map((u, i) => `<div class="top-item"><span class="${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">${i+1}. ${u.name}</span><span>${u.points} نقطة</span></div>`).join('') + '</div>';
+        if(textContainer) textContainer.innerHTML = '<div class="top-card"><h3>📝 قائمة الكتابي</h3>' + topText.map((u, i) => `<div class="top-item"><span class="${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">${i+1}. ${u.name}</span><span>${u.points} نقطة</span></div>`).join('') + '</div>';
+    }
+    
+    function renderEvents() {
+        const upcoming = events.filter(e => e.status === 'upcoming');
+        const past = events.filter(e => e.status === 'past');
+        const upcomingDiv = document.getElementById('upcoming-events-list');
+        const pastDiv = document.getElementById('past-events-list');
+        if(upcomingDiv) upcomingDiv.innerHTML = upcoming.length ? upcoming.map(e => `<div class="feature-card"><h3>${e.name}</h3><p>${e.date} - ${e.desc}</p></div>`).join('') : '<p>لا يوجد فعاليات قادمة</p>';
+        if(pastDiv) pastDiv.innerHTML = past.length ? past.map(e => `<div class="feature-card"><h3>${e.name}</h3><p>${e.date} - ${e.desc}</p></div>`).join('') : '<p>لا يوجد فعاليات منتهية</p>';
+    }
+    
+    function renderStaff() {
+        const staffList = document.getElementById('staff-list');
+        if(staffList) staffList.innerHTML = staff.map(s => `<div class="feature-card"><i class="fas fa-user-shield"></i><h3>${s.rank}</h3><p>${s.name}</p></div>`).join('');
+    }
+    
+    function updateStatsDisplay() {
+        const statOnline = document.getElementById('stat-online');
+        const statTotal = document.getElementById('stat-total');
+        const statPoints = document.getElementById('stat-points');
+        const statEvents = document.getElementById('stat-events');
+        const statVip = document.getElementById('stat-vip');
+        const statReviews = document.getElementById('stat-reviews');
+        const onlinePlayers = document.getElementById('online-players');
+        const totalMembers = document.getElementById('total-members');
+        const totalPoints = document.getElementById('total-points');
+        
+        if(statOnline) statOnline.innerText = stats.online;
+        if(statTotal) statTotal.innerText = stats.totalMembers;
+        if(statPoints) statPoints.innerText = stats.totalPoints;
+        if(statEvents) statEvents.innerText = stats.eventsDone;
+        if(statVip) statVip.innerText = stats.vipMembers;
+        if(statReviews) statReviews.innerText = reviews.length;
+        if(onlinePlayers) onlinePlayers.innerText = stats.online;
+        if(totalMembers) totalMembers.innerText = stats.totalMembers;
+        if(totalPoints) totalPoints.innerText = stats.totalPoints;
+    }
+    
+    async function sendToWebhook(type, data) {
+        const webhook = 'https://canary.discord.com/api/webhooks/1486701562113036288/AyNqlCqog0jS3Br8bULFPdJLBwK0KXOcw5kUZeCiqTZEHw90MhK1669fR3C3S__iaDsu';
+        try {
+            await fetch(webhook, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+        } catch(e) {}
+    }
+    
+    const reviewForm = document.getElementById('review-form');
+    if(reviewForm) {
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('review-name').value;
+            const rating = document.getElementById('review-rating').value;
+            const text = document.getElementById('review-text').value;
+            if(!name || !text) { alert('املأ جميع الحقول'); return; }
+            const newReview = { name, rating: parseInt(rating), text, date: new Date().toLocaleString() };
+            reviews.unshift(newReview);
+            stats.reviewsCount = reviews.length;
+            saveAll();
+            await sendToWebhook('review', { embeds: [{ title: '⭐ تقييم جديد', color: 0x00ffff, fields: [{ name: name, value: `${'★'.repeat(rating)} (${rating}/5)\n${text}` }] }] });
+            const successDiv = document.getElementById('review-success');
+            if(successDiv) successDiv.style.display = 'block';
+            reviewForm.reset();
+            setTimeout(() => { if(successDiv) successDiv.style.display = 'none'; }, 3000);
+            updateStatsDisplay();
+        });
+    }
+    
+    function adminLogin() {
+        const email = document.getElementById('admin-email').value;
+        const pass = document.getElementById('admin-password').value;
+        if(adminEmails.includes(email) && pass === adminPassword) {
+            localStorage.setItem('smm_admin_logged', email);
+            showPage('admin-panel');
+            renderAdminPanel();
+        } else {
+            const errorDiv = document.getElementById('login-error');
+            if(errorDiv) errorDiv.innerText = '❌ إيميل أو كلمة مرور خاطئة! تواصل مع Fillx لحل المشكلة';
+        }
+    }
+    
+    function logout() {
+        localStorage.removeItem('smm_admin_logged');
+        showPage('home');
+    }
+    
+    function renderAdminPanel() {
+        const dashboard = document.getElementById('admin-dashboard');
+        const manageReviews = document.getElementById('admin-manage-reviews');
+        const manageEvents = document.getElementById('admin-manage-events');
+        const manageTop = document.getElementById('admin-manage-top');
+        const manageStats = document.getElementById('admin-manage-stats');
+        
+        if(dashboard) dashboard.innerHTML = `<div class="stats-numbers"><div class="stat-box"><h3>${reviews.length}</h3><p>تقييمات</p></div><div class="stat-box"><h3>${events.length}</h3><p>فعاليات</p></div><div class="stat-box"><h3>${stats.online}</h3><p>أونلاين</p></div></div><h3>آخر التقييمات:</h3>${reviews.slice(0,5).map(r => `<div class="feature-card"><strong>${r.name}</strong> (${r.rating}★)<br>${r.text}</div>`).join('') || '<p>لا توجد تقييمات</p>'}`;
+        
+        if(manageReviews) manageReviews.innerHTML = reviews.map((r, i) => `<div class="feature-card"><strong>${r.name}</strong> (${r.rating}★) - ${r.date}<br>${r.text}<br><button onclick="deleteReview(${i})" style="background:red;border:none;padding:5px 10px;border-radius:10px;">🗑️ حذف</button></div>`).join('') || '<p>لا توجد تقييمات</p>';
+        
+        if(manageEvents) {
+            manageEvents.innerHTML = `
+                <form id="add-event-form"><input type="text" id="event-name" placeholder="اسم الفعالية" class="server-ip" style="width:100%;margin:5px 0"><input type="text" id="event-date" placeholder="التاريخ" class="server-ip" style="width:100%;margin:5px 0"><input type="text" id="event-desc" placeholder="الوصف" class="server-ip" style="width:100%;margin:5px 0"><select id="event-status" class="server-ip"><option value="upcoming">قادمة</option><option value="past">منتهية</option></select><button type="submit" class="btn-primary">➕ إضافة فعالية</button></form>
+                <h3>الفعاليات الحالية:</h3>
+                ${events.map((e, i) => `<div class="feature-card"><strong>${e.name}</strong> - ${e.date}<br>${e.desc}<br><button onclick="deleteEvent(${i})" style="background:red;border:none;padding:5px 10px;border-radius:10px;">🗑️ حذف</button></div>`).join('') || '<p>لا توجد فعاليات</p>'}
+            `;
+            const addEventForm = document.getElementById('add-event-form');
+            if(addEventForm) {
+                addEventForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const newEvent = { name: document.getElementById('event-name').value, date: document.getElementById('event-date').value, desc: document.getElementById('event-desc').value, status: document.getElementById('event-status').value };
+                    events.push(newEvent);
+                    saveAll();
+                    await sendToWebhook('event', { embeds: [{ title: '🎉 فعالية جديدة', color: 0x00ffff, description: `${newEvent.name}\n${newEvent.date}\n${newEvent.desc}` }] });
+                    renderAdminPanel();
+                });
+            }
+        }
+        
+        if(manageTop) {
+            manageTop.innerHTML = `
+                <h3>Top 5 Voice</h3>${topVoice.map((u, i) => `<div><input type="text" id="voice-name-${i}" value="${u.name}" placeholder="الاسم" class="server-ip" style="width:45%;margin:5px"><input type="number" id="voice-points-${i}" value="${u.points}" placeholder="النقاط" class="server-ip" style="width:30%;margin:5px"><button onclick="updateVoice(${i})" class="btn-primary">تحديث</button></div>`).join('')}
+                <h3>Top 5 Text</h3>${topText.map((u, i) => `<div><input type="text" id="text-name-${i}" value="${u.name}" placeholder="الاسم" class="server-ip" style="width:45%;margin:5px"><input type="number" id="text-points-${i}" value="${u.points}" placeholder="النقاط" class="server-ip" style="width:30%;margin:5px"><button onclick="updateText(${i})" class="btn-primary">تحديث</button></div>`).join('')}
+            `;
+        }
+        
+        if(manageStats) {
+            manageStats.innerHTML = `
+                <div><label>اللاعبين أونلاين:</label><input type="number" id="edit-online" value="${stats.online}" class="server-ip"></div>
+                <div><label>إجمالي الأعضاء:</label><input type="number" id="edit-members" value="${stats.totalMembers}" class="server-ip"></div>
+                <div><label>إجمالي النقاط:</label><input type="number" id="edit-points" value="${stats.totalPoints}" class="server-ip"></div>
+                <button onclick="updateStats()" class="btn-primary">حفظ التعديلات</button>
+            `;
+        }
+    }
+    
+    function deleteReview(i) { reviews.splice(i,1); stats.reviewsCount = reviews.length; saveAll(); renderAdminPanel(); updateStatsDisplay(); }
+    function deleteEvent(i) { events.splice(i,1); saveAll(); renderAdminPanel(); renderEvents(); }
+    function updateVoice(i) { topVoice[i] = { name: document.getElementById(`voice-name-${i}`).value, points: parseInt(document.getElementById(`voice-points-${i}`).value) }; saveAll(); renderAdminPanel(); renderTopLists(); }
+    function updateText(i) { topText[i] = { name: document.getElementById(`text-name-${i}`).value, points: parseInt(document.getElementById(`text-points-${i}`).value) }; saveAll(); renderAdminPanel(); renderTopLists(); }
+    function updateStats() { stats.online = parseInt(document.getElementById('edit-online').value); stats.totalMembers = parseInt(document.getElementById('edit-members').value); stats.totalPoints = parseInt(document.getElementById('edit-points').value); saveAll(); updateStatsDisplay(); renderAdminPanel(); }
+    
+    function showAdminSection(section) {
+        const sections = ['dashboard', 'manage-reviews', 'manage-events', 'manage-top', 'manage-stats'];
+        sections.forEach(s => {
+            const el = document.getElementById(`admin-${s}`);
+            if(el) el.style.display = 'none';
+        });
+        const activeEl = document.getElementById(`admin-${section}`);
+        if(activeEl) activeEl.style.display = 'block';
+    }
+    
+    // Particles
+    const canvas = document.getElementById('particle-canvas');
+    if(canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        for(let i=0;i<100;i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, radius: Math.random()*2+1, speedX: (Math.random()-0.5)*0.5, speedY: (Math.random()-0.5)*0.3, color: `hsl(${Math.random()*60+160},100%,60%)` });
+        function animate() { 
+            if(!ctx) return;
+            ctx.clearRect(0,0,canvas.width,canvas.height); 
+            particles.forEach(p => { 
+                ctx.beginPath(); 
+                ctx.arc(p.x,p.y,p.radius,0,Math.PI*2); 
+                ctx.fillStyle = p.color; 
+                ctx.fill(); 
+                p.x+=p.speedX; 
+                p.y+=p.speedY; 
+                if(p.x<0) p.x=canvas.width; 
+                if(p.x>canvas.width) p.x=0; 
+                if(p.y<0) p.y=canvas.height; 
+                if(p.y>canvas.height) p.y=0; 
+            }); 
+            requestAnimationFrame(animate); 
+        }
+        animate();
+    }
+    
+    // Navigation - ربط الأزرار
+    document.querySelectorAll('[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const page = btn.getAttribute('data-page');
+            if(page) showPage(page);
+        });
+    });
+    
+    const adminBtn = document.getElementById('admin-login-btn');
+    if(adminBtn) {
+        adminBtn.addEventListener('click', () => showPage('admin-login'));
+    }
+    
+    // التحقق من تسجيل الدخول
+    if(localStorage.getItem('smm_admin_logged')) {
+        showPage('admin-panel');
+    } else {
+        // الصفحة الرئيسية تظهر أول شي
+        showPage('home');
+    }
+    
+    // تحديث الأعداد كل 8 ثواني
+    setInterval(() => { 
+        stats.online += Math.floor(Math.random()*7)-3; 
+        if(stats.online<180) stats.online=210; 
+        if(stats.online>350) stats.online=300; 
+        saveAll(); 
+        updateStatsDisplay(); 
+    }, 8000);
+    
+    // تحديث كل البيانات عند التحميل
+    updateStatsDisplay();
+    renderStaff();
+    renderTopLists();
+    renderEvents();
+</script>
+</body>
+</html>
